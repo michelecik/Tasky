@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Prova web app con Python</title>
+	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+	<link rel="icon" href="static/img/logo.png" type="image/png" />
+	
+	<!-- IMPOTING MY OWN STYLE RULES -->
+	<link rel="stylesheet" href="static/css/stile.css">
+	
+	<!-- IMPORTING JQUERY -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+	<div class="login_box">
+		<div class="login_logo"></div>
+		<div class="login_field" data-type="userid">
+			<div class="login_field_label">UserId:</div>
+			<div class="login_field_value">
+				<input class="login_input" \>
+			</div>
+		</div>
+		<div class="login_field" data-type="psw">
+			<div class="login_field_label">Password</div>
+			<div class="login_field_value">
+				<input class="login_input" type="password" \>
+			</div>
+		</div>
+		<div class="login_button">
+			LOGIN
+		</div>
+		<a href="signUp">
+			<div class="login_register">
+				Non hai un'account? Registrati subito.
+			</div>
+		</a>
+	</div>
+	
+	<script src="static/js/main.js"></script>
+	<script>
+		$('body').on('click', '.login_button', async function() {
+			var parms = {}
+			
+			parms['userid'] = $('.login_field[data-type="userid"] .login_input').val();
+			parms['psw'] = $('.login_field[data-type="psw"] .login_input').val();
+			
+			
+			response = await controller('login', parms);
+
+			if (response.code != 200) {
+				alert('Errore durante la registrazione. #' + response.code + ': '+ response.content);
+			} else {
+				alert("Utente registrato con successo. ID: " + response.id);
+				
+				localStorage.setItem('credential', JSON.stringify(parms));
+				
+				$(window.location).attr('href', '/');
+			}
+		});
+	</script>>
+</body>
+</html>

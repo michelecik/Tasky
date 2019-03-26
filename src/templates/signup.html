@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Prova web app con Python</title>
+	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+	<link rel="icon" href="static/img/logo.png" type="image/png" />
+	
+	
+	<!-- IMPOTING MY OWN STYLE RULES -->
+	<link rel="stylesheet" href="static/css/stile.css">
+	
+	<!-- IMPORTING JQUERY -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+	<div class="login_box">
+		<div class="login_logo"></div>
+		<div class="login_field" data-type="userid" data-required="1">
+			<div class="login_field_label">Nome utente: *</div>
+			<div class="login_field_value">
+				<input class="login_input" \>
+			</div>
+			<div class="login_field_err"></div>
+		</div>
+		<div class="login_field" data-type="psw" data-required="1">
+			<div class="login_field_label">Password: *</div>
+			<div class="login_field_value">
+				<input class="login_input" type="password" \>
+			</div>
+			<div class="login_field_err"></div>
+		</div>
+		<div class="login_field" data-type="email" data-required="1">
+			<div class="login_field_label">Email: *</div>
+			<div class="login_field_value">
+				<input class="login_input" type="email" \>
+			</div>
+			<div class="login_field_err"></div>
+		</div>
+		<div class="login_field" data-type="tel" data-required="0">
+			<div class="login_field_label">Numero di telefono: </div>
+			<div class="login_field_value">
+				<input class="login_input" \>
+			</div>
+			<div class="login_field_err"></div>
+		</div>
+		<div class="login_field" data-type="name" data-required="1">
+			<div class="login_field_label">Nome: *</div>
+			<div class="login_field_value">
+				<input class="login_input" \>
+			</div>
+			<div class="login_field_err"></div>
+		</div>
+		<div class="login_field" data-type="surname" data-required="1">
+			<div class="login_field_label">Cognome: *</div>
+			<div class="login_field_value">
+				<input class="login_input" \>
+			</div>
+			<div class="login_field_err"></div>
+		</div>
+		<div class="login_button">
+			REGISTRATI
+		</div>
+		<a href="signIn">
+			<div class="login_register">
+				Hai già un'accout? Torna al login.
+			</div>
+		</a>
+	</div>
+	
+	<script src="static/js/main.js"></script>
+	<script>
+		$('body').on('click', '.login_button', async function() {
+			var parms = {}
+			
+			var formValidate = true;
+			$('.login_field').each(function() {
+				var key = $(this).data('type');
+				var value = $(this).find('.login_input').val();
+				
+				var isRequire = ($(this).data('required') == '1')
+				
+				if (isRequire) {
+					if ((value === undefined) || (value == null) || (value == '')) {
+						formValidate = false;
+						$(this).find('.login_field_err').html('Questo campo non può essere vuoto');
+					} else {
+						$(this).find('.login_field_err').html('');
+					}
+				}
+				
+				parms[key] = value;
+			});
+			
+			if (formValidate) {
+				response = await controller('register', parms);
+				
+				if (response.code != 200) {
+					alert('Errore durante la registrazione. #' + response.code + ': '+ response.content);
+				} else {
+					alert("Utente registrato con successo");
+					$(window.location).attr('href', 'signIn');
+				}
+			}
+		});
+	</script>
+</body>
+</html>
