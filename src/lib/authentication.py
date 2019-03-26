@@ -4,8 +4,7 @@ def getUsrId(dbConn, usr, psw):
         sql = dbConn.db.select([dbConn.utenti]).where(dbConn.db.and_(dbConn.utenti.columns.userid == usr, dbConn.utenti.columns.psw_MD5 == psw))
         query_stack = dbConn.engine.execute(sql)
         result = query_stack.fetchall()
-
-        print(result)
+        #print(result[0].key())
 
         if len(result) <= 0:
             response = {
