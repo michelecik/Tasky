@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2> overview </h2>
+
+{% for progetto in progetti %}
+
+<h3>{{ progetto.nome }}</h3>
+
+{% endfor %}
+
+{% endblock %}
