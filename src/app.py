@@ -3,6 +3,7 @@ import json
 
 from lib.dbconnection import *
 from lib.authentication import *
+from lib.progetti import *
 
 app = Flask(__name__, static_url_path='/static')
 app.config['SECRET_KEY'] = 'e5ac358c-f0bf-11e5-9e39-d3b532c10a28'
@@ -12,8 +13,8 @@ dbConn = getConnection() # Connessione con il DB (la funzione getConnection è i
 @app.route("/")
 def main():
     # Test user is logged
-    #if (getUsrId(dbConn, session.get('userid'), session.get('psw'))['code'] == 200):
-        #return home()
+    if (getUsrId(dbConn, session.get('userid'), session.get('psw'))['code'] == 200):
+        return render_template('index.html')
     return redirect('login')
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -50,6 +51,26 @@ def register():
             response = getUsrId(dbConn, data['userid'], data['psw'])
 
         return json.dumps(response)
+
+@app.route('/create', methods=['GET', 'POST'])
+def create():
+    if request.method == 'POST':
+        projectName = request.form['name']
+        projectCode = request.form['code']
+        projectDesc = request.form['desc']
+        userId = getUsrId(dbConn, session.get('userid'), session.get('psw'))['id']
+        print(userId)
+
+        newProject = Progetti(projectName, projectCode, projectDesc, userId)
+        print(newProject)
+        dbConn.s.add(newProject)
+        dbConn.s.commit()
+
+    return render_template('create.html')
+
+@app.route('/overview')
+def overview():
+    return render_template('overview.html', progetti = getAllProgetti(dbConn, session) )
 
 # ---- MAIN ---- #
 if __name__ == "__main__":

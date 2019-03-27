@@ -56,6 +56,13 @@ class Progetti(Base):
     nome = Column(String)
     codice = Column(String)
     descrizione = Column(String)
+    fk_utente = Column(Integer)
+
+    def __init__(self, nome, codice, descrizione, fk_utente):
+        self.nome = nome
+        self.codice = codice
+        self.descrizione = descrizione
+        self.fk_utente = fk_utente
 
 
 class Ruoli(Base):
