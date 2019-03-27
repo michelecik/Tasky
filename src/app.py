@@ -1,6 +1,5 @@
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, redirect
 import json
-import sys
 
 from lib.dbconnection import *
 from lib.authentication import *
@@ -15,7 +14,7 @@ def main():
     # Test user is logged
     #if (getUsrId(dbConn, session.get('userid'), session.get('psw'))['code'] == 200):
         #return home()
-    return login()
+    return redirect('login')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

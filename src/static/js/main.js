@@ -16,7 +16,7 @@ async function controller(action, parms) {
 	
 	return ret_val;	
 }
-
+/* --- Memoria del login fatto secondo gli standard RESTFull ---
 var credential = null;
 function getCredential() {
 	var credential = localStorage.getItem("credential");
@@ -27,3 +27,4 @@ function getCredential() {
 		return null;
 	}
 }
+*/

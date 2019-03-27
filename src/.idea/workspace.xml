@@ -3,11 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="7b20f482-686c-4c34-89fe-bc8e2112c364" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/authentication.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/authentication.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/dbconnection.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/dbconnection.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/Database.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/Database.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/Tables.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/Tables.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/signup.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/signup.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/signin.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/signin.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -20,8 +17,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="320">
-              <caret line="36" column="35" lean-forward="true" selection-start-line="36" selection-start-column="35" selection-end-line="36" selection-end-column="35" />
+            <state relative-caret-position="272">
+              <caret line="16" column="28" lean-forward="true" selection-start-line="16" selection-start-column="28" selection-end-line="16" selection-end-column="28" />
               <folding>
                 <element signature="e#1#59#0" expanded="true" />
               </folding>
@@ -388,8 +385,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="320">
-          <caret line="36" column="35" lean-forward="true" selection-start-line="36" selection-start-column="35" selection-end-line="36" selection-end-column="35" />
+        <state relative-caret-position="272">
+          <caret line="16" column="28" lean-forward="true" selection-start-line="16" selection-start-column="28" selection-end-line="16" selection-end-column="28" />
           <folding>
             <element signature="e#1#59#0" expanded="true" />
           </folding>

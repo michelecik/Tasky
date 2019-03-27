@@ -49,13 +49,14 @@
 			response = await controller('login', parms);
 
 			if (response.code != 200) {
-				alert('Errore durante la registrazione. #' + response.code + ': '+ response.content);
+				alert('Errore durante il login. #' + response.code + ': '+ response.content);
 			} else {
-				alert("Utente registrato con successo. ID: " + response.id);
+				alert('Login eseguito con successo. ID: ' + response.id);
 				
-				localStorage.setItem('credential', JSON.stringify(parms));
-				
+				/* --- Memoria del login fatto secondo gli standard RESTFull ---
+				localStorage.setItem('credential', JSON.stringify(parms));	
 				$(window.location).attr('href', '/');
+				*/
 			}
 		});
 	</script>>
