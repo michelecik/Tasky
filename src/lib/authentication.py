@@ -31,5 +31,34 @@ def createUser(dbConn, userData):
     # ...
     user_tmp = Utenti(userData)
 
-    dbConn.s.add(user_tmp)
-    dbConn.s.commit()
+    user_validate = user_tmp.validate()
+
+    if (getUsrId(dbConn, userData['userid'], userData['psw'])['code'] == 200):
+        user_validate['userid'] = 'Il nome utente è gia presente'
+
+    len(user_validate)
+    if (len(user_validate)>0):
+        response = {
+            'code': 400,
+            'content': 'Dati invalidi',
+            'msg': user_validate
+        }
+        return response
+
+    try:
+        dbConn.s.add(user_tmp)
+        dbConn.s.commit()
+    except Exception as e:
+        print(e)
+        response = {
+            'code': 500,
+            'content': 'Errore anomalo'
+        }
+        return response
+
+    response = {
+        'code': 200,
+        'content': 'Utente creato correttamente'
+    }
+
+    return response

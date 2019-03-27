@@ -44,14 +44,14 @@
 			</div>
 			<div class="login_field_err"></div>
 		</div>
-		<div class="login_field" data-type="name" data-required="1">
+		<div class="login_field" data-type="nome" data-required="1">
 			<div class="login_field_label">Nome: *</div>
 			<div class="login_field_value">
 				<input class="login_input" \>
 			</div>
 			<div class="login_field_err"></div>
 		</div>
-		<div class="login_field" data-type="surname" data-required="1">
+		<div class="login_field" data-type="cognome" data-required="1">
 			<div class="login_field_label">Cognome: *</div>
 			<div class="login_field_value">
 				<input class="login_input" \>
@@ -97,6 +97,13 @@
 				
 				if (response.code != 200) {
 					alert('Errore durante la registrazione. #' + response.code + ': '+ response.content);
+					
+					if (response.code == 400) {
+						for(var name in response.msg) {
+							var value = response.msg[name];
+							$('.login_field[data-type="' + name + '"] .login_field_err').html(value);
+						}
+					}
 				} else {
 					alert("Utente registrato con successo");
 					$(window.location).attr('href', 'login');

@@ -2,7 +2,7 @@
 import time
 import traceback
 
-from sqlalchemy import create_engine, Column, String, Date, Integer, ForeignKey
+from sqlalchemy import create_engine
 from sqlalchemy.exc import OperationalError
 from model.Database import Database
 

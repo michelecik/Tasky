@@ -8,7 +8,7 @@ from lib.authentication import *
 app = Flask(__name__, static_url_path='/static')
 app.config['SECRET_KEY'] = 'e5ac358c-f0bf-11e5-9e39-d3b532c10a28'
 
-dbConn = getConnection()
+dbConn = getConnection() # Connessione con il DB (la funzione getConnection è in lib/dbconnection.py
 
 @app.route("/")
 def main():
@@ -33,8 +33,9 @@ def login():
         if (response['code'] == 200):
             session['userid'] = userid
             session['psw'] = psw
-        else:
-            return json.dumps(response)
+            #return main()
+
+        return json.dumps(response)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -43,12 +44,12 @@ def register():
     else:
         data = json.loads(request.get_data())
 
-        createUser(dbConn, data)
+        response = createUser(dbConn, data)
 
-        response = getUsrId(dbConn, data['userid'], data['psw'])
+        if (response['code'] == 200):
+            response = getUsrId(dbConn, data['userid'], data['psw'])
 
-    return json.dumps(response)
-
+        return json.dumps(response)
 
 # ---- MAIN ---- #
 if __name__ == "__main__":
