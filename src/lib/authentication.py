@@ -1,21 +1,17 @@
+from  model.Tables import *
 def getUsrId(dbConn, usr, psw):
     try:
-        #sql = "SELECT id FROM users WHERE userid = '{}' AND psw_MD5 = '{}'".format(usr, psw)
-        sql = dbConn.db.select([dbConn.utenti]).where(dbConn.db.and_(dbConn.utenti.columns.userid == usr, dbConn.utenti.columns.psw_MD5 == psw))
-        query_stack = dbConn.engine.execute(sql)
-        result = query_stack.fetchall()
-        #print(result[0].key())
+        result = dbConn.s.query(Utenti.id).filter(Utenti.userid == usr, Utenti.psw_MD5 == psw).first()
 
-        if len(result) <= 0:
+        if not (result): # Credenziali errate
             response = {
                 'code': 403,
                 'content': 'User o Password errate'
             }
             return response
 
-        #for tupla in result:
-            #id = tupla['id']
-    except:
+    except Exception as e:
+        print(e)
         response = {
             'code': 500,
             'content': 'Errore anomalo'
@@ -24,8 +20,16 @@ def getUsrId(dbConn, usr, psw):
 
     response = {
         'code': 200,
-        'content': 'L\'utente esiste'#,
-        #'id': id
+        'content': 'L\'utente esiste',
+        'id': result.id
     }
 
     return response
+
+def createUser(dbConn, userData):
+    # Controlli di validità
+    # ...
+    user_tmp = Utenti(userData)
+
+    dbConn.s.add(user_tmp)
+    dbConn.s.commit()
