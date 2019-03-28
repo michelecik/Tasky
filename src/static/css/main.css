@@ -1,0 +1,8 @@
+ul#listaProgetti {
+    list-style: none;
+    padding: 0px;
+}
+
+#progettoItem {
+    margin-bottom: 2rem;
+}

@@ -3,10 +3,34 @@
 {% block content %}
 <h2> overview </h2>
 
-{% for progetto in progetti %}
+<ul id="listaProgetti">
 
-<h3>{{ progetto.nome }}</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Nome progetto</th>
+                <th scope="col">Codice</th>
+                <th scope="col">Data di inizio</th>
+                <th scope="col">Data di fine</th>
+            </tr>
+        </thead>
 
-{% endfor %}
+        <tbody>
+
+            {% for progetto in progetti %}
+            
+            <tr>
+                <th><a href="project?id={{ progetto.id }}">{{ progetto.nome }} </a></th>
+                <td>{{ progetto.codice }}</td>
+                <td>{{ progetto.data_inizio }}</td>
+                <td>{{ progetto.data_fine }}</td>
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+    </table>
+
+</ul>
 
 {% endblock %}

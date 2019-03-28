@@ -57,14 +57,25 @@ def create():
         projectName = request.form['name']
         projectCode = request.form['code']
         projectDesc = request.form['desc']
-        userId = getUsrId(dbConn, session.get('userid'), session.get('psw'))['id']
-        print(userId)
+        projectStartDate = request.form['startDate']
+        projectEndDate = request.form['endDate']
 
-        newProject = Progetti(projectName, projectCode, projectDesc, userId)
-        print(newProject)
+        userId = getUsrId(dbConn, session.get('userid'), session.get('psw'))['id']
+
+        newProject = Progetti(projectName, projectCode, projectDesc, projectStartDate, projectEndDate, userId)
+        
         dbConn.s.add(newProject)
         dbConn.s.commit()
 
+        print(newProject.id)
+        """ dopo aver creato il progetto creo automaticamente le 5 fasi principali """
+
+        fasi = ['avvio', 'pianificazione', 'esecuzione', 'monitoraggio e controllo', 'conclusione']
+        for fase in fasi:
+            newFase = Fasi(fase, None, None, None, None, 1, newProject.id, 1 )
+            dbConn.s.add(newFase)
+            dbConn.s.commit()
+        
     return render_template('create.html')
 
 @app.route('/overview')
