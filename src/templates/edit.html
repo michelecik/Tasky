@@ -7,17 +7,17 @@
 <div class="container">
     <div class="row justify-content-around">
         <div class="col-6">
-            <h2>crea un nuovo progetto</h2>
+            <h2>modifica {{ progetto.nome }}</h2>
             <div class="createForm">
                     <form action="" method="post">
-                            <input class="form-control" name="name" type="text" placeholder="Nome progetto">
-                            <input class="form-control" name="code" type="text" placeholder="Codice progetto">
-                            <input class="form-control" name="desc" type="text" placeholder="Descrizione progetto">
+                            <input class="form-control" name="name" type="text" value="{{ progetto.nome }}">
+                            <input class="form-control" name="code" type="text" value="{{ progetto.codice }}">
+                            <input class="form-control" name="desc" type="text" value="{{ progetto.descrizione }}">
                         
                             <input type="date" name="startDate" id="project-startDate">
                             <input type="date" name="endDate" id="project-endDate">
                         
-                            <input type="submit" value="Crea progetto!" id="submitBtn" class="btn btn-lg btn-block">
+                            <input type="submit" value="Applica modifiche" id="submitBtn" class="btn btn-default btn-lg btn-block">
                         </form>
             </div>
                 

@@ -1,9 +1,11 @@
-from flask import Flask, render_template, request, session, redirect
+from flask import Flask, render_template, request, session, redirect, flash
 import json
 
 from lib.dbconnection import *
 from lib.authentication import *
 from lib.progetti import *
+from lib.fasi import *
+
 
 app = Flask(__name__, static_url_path='/static')
 app.config['SECRET_KEY'] = 'e5ac358c-f0bf-11e5-9e39-d3b532c10a28'
@@ -69,19 +71,72 @@ def create():
         dbConn.s.commit()
 
         print(newProject.id)
-        """ dopo aver creato il progetto creo automaticamente le 5 fasi principali """
 
-        fasi = ['avvio', 'pianificazione', 'esecuzione', 'monitoraggio e controllo', 'conclusione']
+        flash('Progetto creato correttamente')
+
+        """ dopo aver creato il progetto creo le 5 fasi principali """
+
+        fasi = ['Avvio', 'Pianificazione', 'Esecuzione', 'Monitoraggio e Controllo', 'Conclusione']
         for fase in fasi:
             newFase = Fasi(fase, None, None, None, None, 1, newProject.id, 1 )
             dbConn.s.add(newFase)
             dbConn.s.commit()
-        
+
     return render_template('create.html')
+
+
+""" @app.route('/addfase/<int:project_id>', methods=['GET', 'POST'])
+def addFase(project_id) {
+    faseSecondaria = Fasi('fase secondaria', 'fase secondaria', None, None, 1, 0, newProject.id, 1)
+        dbConn.s.add(faseSecondaria)
+        dbConn.s.commit()
+} """
+
+@app.route('/edit/<int:project_id>', methods=['GET', 'POST'])
+def edit(project_id):
+    progetto = getProgettoById(dbConn, session, project_id)
+    if request.method == 'POST':
+        projectName = request.form['name']
+        projectCode = request.form['code']
+        projectDesc = request.form['desc']
+        projectStartDate = request.form['startDate']
+        projectEndDate = request.form['endDate']
+
+        """ update progetto """
+        progetto.nome = projectName
+        progetto.codice = projectCode
+        progetto.descrizione = projectDesc
+        dbConn.s.commit()
+        flash('Progetto modificato correttamente')
+
+        return redirect('/overview')
+
+    
+    return render_template('edit.html', progetto = progetto)
+
+
+@app.route('/delete/<int:project_id>')
+def delete(project_id):
+    if request.method == 'POST':
+        print(project_id)
+        proj = getProgettoById(dbConn, session, project_id)
+        dbConn.s.delete(proj)
+
+    return redirect('/overview')
 
 @app.route('/overview')
 def overview():
     return render_template('overview.html', progetti = getAllProgetti(dbConn, session) )
+
+
+@app.route('/project')
+def viewProject():
+    id = request.args.get('id')
+    print(id)
+    return render_template(
+        'project.html',
+        progetto = getProgettoById(dbConn, session, id)
+        )
 
 # ---- MAIN ---- #
 if __name__ == "__main__":

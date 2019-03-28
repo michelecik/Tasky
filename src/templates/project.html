@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>
+    {{ progetto.nome }}
+</h1>
+
+{% for fase in fasi %}
+<p>{{ fase.nome }}</p>
+
+    {% for faseSeco in fasiSeco %}
+    <small>{{ faseSeco.nome }} </small>
+    {% endfor %}
+
+{% endfor %}
+
+{% endblock %}

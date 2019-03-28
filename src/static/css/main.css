@@ -6,3 +6,17 @@ ul#listaProgetti {
 #progettoItem {
     margin-bottom: 2rem;
 }
+
+.createForm {
+    background-color: #F0A202;
+    padding: 20px;
+}
+
+#submitBtn {
+    background-color: #D95D39;
+    color: #fff;
+}
+
+.createForm form input {
+    margin-top: 20px;
+}

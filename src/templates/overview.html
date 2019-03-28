@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2> overview </h2>
+<h2> Overview </h2>
+
 
 <ul id="listaProgetti">
 
@@ -12,18 +13,26 @@
                 <th scope="col">Codice</th>
                 <th scope="col">Data di inizio</th>
                 <th scope="col">Data di fine</th>
+                <th scope="col">Edit</th>
             </tr>
         </thead>
 
         <tbody>
 
             {% for progetto in progetti %}
-            
+
             <tr>
-                <th><a href="project?id={{ progetto.id }}">{{ progetto.nome }} </a></th>
+                <th><a href="project?id={{ progetto.id }}"> {{ progetto.nome }} </a></th>
                 <td>{{ progetto.codice }}</td>
                 <td>{{ progetto.data_inizio }}</td>
                 <td>{{ progetto.data_fine }}</td>
+                <td>
+                    <a href="/edit/{{ progetto.id }}">
+                        <i class="far fa-edit"></i>
+                    </a>
+                    
+                    <i class="far fa-trash-alt"></i>
+                </td>
             </tr>
 
             {% endfor %}
@@ -32,5 +41,6 @@
     </table>
 
 </ul>
+
 
 {% endblock %}
