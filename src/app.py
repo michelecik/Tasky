@@ -129,15 +129,6 @@ def overview():
     return render_template('overview.html', progetti = getAllProgetti(dbConn, session) )
 
 
-@app.route('/project')
-def viewProject():
-    id = request.args.get('id')
-    print(id)
-    return render_template(
-        'project.html',
-        progetto = getProgettoById(dbConn, session, id)
-        )
-
 # ---- MAIN ---- #
 if __name__ == "__main__":
     app.run()
