@@ -19,6 +19,7 @@ def main():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    # Aggiunto nuovo commento
     if ((request.method == 'GET')):
         return render_template('signin.html')
     else:
