@@ -40,6 +40,16 @@ class Fasi(Base):
     FK_progetto = Column(Integer)
     FK_stato = Column(Integer)
 
+    def __init__(self, nome, desc, data_inizio, data_fine, parent, isMain, FK_progetto, FK_stato):
+        self.nome = nome
+        self.desc = desc
+        self.data_inizio = data_inizio
+        self.data_fine = data_fine
+        self.parent = parent
+        self.isMain = isMain
+        self.FK_progetto = FK_progetto
+        self.FK_stato = FK_stato
+
 
 class Incarichi(Base):
     __tablename__ = 'incarichi'
@@ -56,12 +66,16 @@ class Progetti(Base):
     nome = Column(String)
     codice = Column(String)
     descrizione = Column(String)
+    data_inizio = Column(Date)
+    data_fine = Column(Date)
     fk_utente = Column(Integer)
 
-    def __init__(self, nome, codice, descrizione, fk_utente):
+    def __init__(self, nome, codice, descrizione, data_inizio, data_fine, fk_utente):
         self.nome = nome
         self.codice = codice
         self.descrizione = descrizione
+        self.data_inizio = data_inizio
+        self.data_fine = data_fine
         self.fk_utente = fk_utente
 
 
