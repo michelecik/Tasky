@@ -102,3 +102,7 @@ def getProgettoById(dbConn, session, project_id):
 def getProgettoById(dbConn, session, project_id):
     res = dbConn.s.query(Progetti).filter(Progetti.id == project_id).first()
     return res
+
+def getProgettoById(dbConn, session, project_id):
+    res = dbConn.s.query(Progetti).filter(Progetti.id == project_id).first()
+    return res

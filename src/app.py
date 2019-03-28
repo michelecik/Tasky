@@ -5,7 +5,6 @@ import os
 from lib.dbconnection import *
 from lib.authentication import *
 from lib.progetti import *
-from lib.fasi import *
 
 
 app = Flask(__name__, static_url_path='/static')
