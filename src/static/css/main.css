@@ -8,15 +8,36 @@ ul#listaProgetti {
 }
 
 .createForm {
-    background-color: #F0A202;
-    padding: 20px;
+    width: 100%;
 }
 
 #submitBtn {
-    background-color: #D95D39;
-    color: #fff;
+    margin-top: 40px;
 }
 
 .createForm form input {
     margin-top: 20px;
 }
+
+.addContainer{
+    width: 5rem;
+    display: flex;
+    height: 100px;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+}
+
+    #addFase {
+        width: 3rem;
+        height: 3rem;
+        margin: auto;
+        -webkit-transition: all .3s ease-in-out;
+        /* Safari */
+        transition: all .3s ease-in-out;
+    }
+
+    #addFase:hover {
+        width: 4rem;
+        height: 4rem;
+    }

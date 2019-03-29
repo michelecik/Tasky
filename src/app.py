@@ -83,7 +83,7 @@ def create():
             dbConn.s.add(newFase)
             dbConn.s.commit()
 
-    return render_template('create.html')
+    return redirect('/overview')
 
 
 
@@ -126,7 +126,10 @@ def delete():
 
 @app.route('/overview')
 def overview():
-    return render_template('overview.html', progetti = getAllProgettiAttivi(dbConn, session) )
+    if (getUsrId(dbConn, session.get('userid'), session.get('psw'))['code'] == 200):
+        return render_template('overview.html', progetti = getAllProgettiAttivi(dbConn, session) )
+    else:
+        return redirect('/login')
 
 
 @app.route('/project',  methods=['GET'])

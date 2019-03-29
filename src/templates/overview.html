@@ -22,13 +22,13 @@
                 confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
                 $.ajax({
-                type: 'POST',
-                url: '/delete',
-                data: JSON.stringify({ 'id': clicked, 'titolo': titolo }),
-                success: function () {
-                    document.location.reload();
-                }
-            });
+                    type: 'POST',
+                    url: '/delete',
+                    data: JSON.stringify({ 'id': clicked, 'titolo': titolo }),
+                    success: function () {
+                        document.location.reload();
+                    }
+                });
                 if (result.value) {
                     Swal.fire(
                         'Deleted!',
@@ -38,6 +38,18 @@
                 }
             })
         });
+
+        var adder = $('.addContainer');
+
+        var altezzaAdder = adder.height();
+
+        var altezzaPagina = $(window).height();
+
+        var posizioneAdder = adder.offsetTop;
+        console.log(
+           posizioneAdder
+        )
+
     })
 </script>
 
@@ -64,7 +76,7 @@
 
             {% for progetto in progetti %}
 
-            <tr>
+            <tr class="itemProgetto">
                 <th><a href="project?id={{ progetto.id }}"> {{ progetto.nome }} </a></th>
                 <td>{{ progetto.codice }}</td>
                 <td>{{ progetto.data_inizio }}</td>
@@ -87,6 +99,42 @@
 </ul>
 
 
+<!-- Button trigger modal -->
+<div class="addContainer">
+    <button data-toggle="modal" data-target="#exampleModal" type="button" id="addFase" class="btn btn-primary"
+        style="border-radius: 50%; text-align: center;"><i class="fas fa-plus-circle"></i></button>
+</div>
 
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Crea nuovo progetto</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="createForm">
+                    <form action="/create" method="post">
+                        <input class="form-control" name="name" type="text" placeholder="Nome progetto" required>
+                        <input class="form-control" name="code" type="text" placeholder="Codice progetto">
+                        <input class="form-control" name="desc" type="text" placeholder="Descrizione progetto">
+
+                        <input type="date" name="startDate" id="project-startDate">
+                        <input type="date" name="endDate" id="project-endDate">
+
+                        <input type="submit" value="Crea progetto!" id="submitBtn" class="btn btn-lg btn-block">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
 
 {% endblock %}
