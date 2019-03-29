@@ -18,7 +18,7 @@ def getConnection():
                                                                 DATABASE_ROOT_PASSWORD,
                                                                 DATABASE_HOST,
                                                                 DATABASE_PORT,
-                                                                DATABASE_NAME), echo=True)
+                                                                DATABASE_NAME), echo=False)
             db = Database(engine)
         except OperationalError as ex:
             print(traceback.format_exc())

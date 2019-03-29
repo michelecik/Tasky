@@ -1,14 +1,14 @@
 from flask import Flask, render_template, request, session, redirect, flash
 import json
+import os
 
 from lib.dbconnection import *
 from lib.authentication import *
 from lib.progetti import *
-from lib.fasi import *
 
 
 app = Flask(__name__, static_url_path='/static')
-app.config['SECRET_KEY'] = 'e5ac358c-f0bf-11e5-9e39-d3b532c10a28'
+app.config['SECRET_KEY'] = os.urandom(24)
 
 dbConn = getConnection() # Connessione con il DB (la funzione getConnection è in lib/dbconnection.py
 
@@ -16,7 +16,9 @@ dbConn = getConnection() # Connessione con il DB (la funzione getConnection è i
 def main():
     # Test user is logged
     if (getUsrId(dbConn, session.get('userid'), session.get('psw'))['code'] == 200):
+        print('USER IS LOGGED')
         return render_template('index.html')
+
     return redirect('login')
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -36,7 +38,6 @@ def login():
         if (response['code'] == 200):
             session['userid'] = userid
             session['psw'] = psw
-            #return main()
 
         return json.dumps(response)
 
@@ -126,6 +127,31 @@ def delete():
 @app.route('/overview')
 def overview():
     return render_template('overview.html', progetti = getAllProgettiAttivi(dbConn, session) )
+
+
+@app.route('/project',  methods=['GET'])
+def project():
+    projectId = request.args.get('id', default=None, type=int)
+
+    response = getUsrId(dbConn, session.get('userid'), session.get('psw'))
+    if (response['code'] == 200):
+        userId = response['id']
+
+        if not (projectId):
+            return redirect('overview')
+
+        response = getUserPermissionProject(dbConn, userId, projectId)
+
+        if (response['code'] == 200):
+            response = getFasiProgetto(dbConn, projectId)
+            if (response['code'] == 200):
+                return render_template('project.html', fasi = response['fasi'])
+        else:
+            return overview()
+    else:
+        return redirect('login')
+
+    return render_template('overview.html', progetti = getAllProgetti(dbConn, session) )
 
 
 # ---- MAIN ---- #

@@ -52,7 +52,7 @@
 				alert('Errore durante il login. #' + response.code + ': '+ response.content);
 			} else {
 				alert('Login eseguito con successo. ID: ' + response.id);
-				
+				$(window.location).attr('href', '/');
 				/* --- Memoria del login fatto secondo gli standard RESTFull ---
 				localStorage.setItem('credential', JSON.stringify(parms));	
 				*/

@@ -29,6 +29,7 @@ class Commissioni(Base):
 
 class Fasi(Base):
     __tablename__ = 'fasi'
+    __public__ = ['id', 'nome', 'descrizione', 'data_inizio', 'data_fine', 'FK_stato']
 
     id = Column(Integer, primary_key=True)
     nome = Column(String)
@@ -49,6 +50,14 @@ class Fasi(Base):
         self.isMain = isMain
         self.FK_progetto = FK_progetto
         self.FK_stato = FK_stato
+
+    def toDict(self):
+        dict = {}
+        for public_key in self.__public__:
+            value = getattr(self, public_key)
+            if value:
+                dict[public_key] = value
+        return dict
 
 
 class Incarichi(Base):
