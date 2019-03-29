@@ -4,6 +4,49 @@
 <h2> Overview </h2>
 
 
+
+<script>
+    $(document).ready(function () {
+        var clicked;
+        var titolo;
+        $('.delete').click(function () {
+            titolo = $(this).attr('data-nome');
+            clicked = $(this).attr('data-progetto');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                $.ajax({
+                type: 'POST',
+                url: '/delete',
+                data: JSON.stringify({ 'id': clicked, 'titolo': titolo }),
+                success: function () {
+                    document.location.reload();
+                }
+            });
+                if (result.value) {
+                    Swal.fire(
+                        'Deleted!',
+                        'Your file has been deleted.',
+                        'success'
+                    )
+                }
+            })
+        });
+    })
+</script>
+
+
+<style>
+
+
+</style>
+
 <ul id="listaProgetti">
 
     <table class="table table-striped">
@@ -30,8 +73,9 @@
                     <a href="/edit/{{ progetto.id }}">
                         <i class="far fa-edit"></i>
                     </a>
-                    
-                    <i class="far fa-trash-alt"></i>
+                    <a data-progetto="{{ progetto.id }}" data-nome="{{ progetto.nome }}" class="delete">
+                        <i class="fas fa-trash"></i>
+                    </a>
                 </td>
             </tr>
 
@@ -41,6 +85,8 @@
     </table>
 
 </ul>
+
+
 
 
 {% endblock %}

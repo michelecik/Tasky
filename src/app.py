@@ -85,12 +85,6 @@ def create():
     return render_template('create.html')
 
 
-""" @app.route('/addfase/<int:project_id>', methods=['GET', 'POST'])
-def addFase(project_id) {
-    faseSecondaria = Fasi('fase secondaria', 'fase secondaria', None, None, 1, 0, newProject.id, 1)
-        dbConn.s.add(faseSecondaria)
-        dbConn.s.commit()
-} """
 
 @app.route('/edit/<int:project_id>', methods=['GET', 'POST'])
 def edit(project_id):
@@ -115,18 +109,23 @@ def edit(project_id):
     return render_template('edit.html', progetto = progetto)
 
 
-@app.route('/delete/<int:project_id>')
-def delete(project_id):
+@app.route('/delete', methods=['GET', 'POST'])
+def delete():
+    clicked = None
     if request.method == 'POST':
-        print(project_id)
-        proj = getProgettoById(dbConn, session, project_id)
-        dbConn.s.delete(proj)
+        print('GOT POST REQUESTTTTTTTTTTT')
+        clicked = json.loads(request.get_data())
+        print(clicked['id'], clicked['titolo'])
+        progetto = getProgettoById(dbConn, session, clicked['id'])
+        progetto.stato = 0
+        dbConn.s.commit()
+        flash('progetto elimineto')
 
     return redirect('/overview')
 
 @app.route('/overview')
 def overview():
-    return render_template('overview.html', progetti = getAllProgetti(dbConn, session) )
+    return render_template('overview.html', progetti = getAllProgettiAttivi(dbConn, session) )
 
 
 # ---- MAIN ---- #

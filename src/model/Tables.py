@@ -68,6 +68,7 @@ class Progetti(Base):
     descrizione = Column(String)
     data_inizio = Column(Date)
     data_fine = Column(Date)
+    stato = Column(Integer, default=1)
     fk_utente = Column(Integer)
 
     def __init__(self, nome, codice, descrizione, data_inizio, data_fine, fk_utente):

@@ -10,6 +10,12 @@ def getAllProgetti(dbConn, session):
     return res
 
 
+def getAllProgettiAttivi(dbConn, session):
+    userId = getUsrId(dbConn, session.get('userid'), session.get('psw'))['id']
+    res = dbConn.s.query(Progetti).filter(Progetti.fk_utente == userId).filter(Progetti.stato == 1).all()
+    return res
+
+
 def getProgettoById(dbConn, session, project_id):
     res = dbConn.s.query(Progetti).filter(Progetti.id == project_id).first()
     return res
