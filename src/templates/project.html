@@ -1,17 +1,31 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>
-    {{ progetto.nome }}
-</h1>
+<div class="fasi">
+</div>
 
-{% for fase in fasi %}
-<p>{{ fase.nome }}</p>
-
-    {% for faseSeco in fasiSeco %}
-    <small>{{ faseSeco.nome }} </small>
-    {% endfor %}
-
-{% endfor %}
-
+<script>
+    var fasi = JSON.parse('{{ fasi | tojson | safe }}');
+	
+	function getFasiHTML(fasi) {
+		var html_code = '<div class="fase_box">';
+		for (key in fasi) {
+			fase = fasi[key];
+			// Riga con info riguardanti la fase
+			html_code += '<div class="fase" data-id="' + fase.info.id + '">' + fase.info.nome + '</div>';
+			
+			//  Children box
+			if (fase.children != null) {
+				html_code += '<div class="children">' + getFasiHTML(fase.children) + '</div>'; // Ricorsione
+			}
+		}
+		html_code += '</div>';
+		
+		return html_code;
+	}
+	
+	$().ready(function() {
+		$('.fasi').html(getFasiHTML(fasi));
+	});
+</script>
 {% endblock %}

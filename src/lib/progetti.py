@@ -61,7 +61,7 @@ def getFasiProgetto(dbConn, projectId):
         fasi_tmp = dict()
         for tupla in result:
             fasi_tmp[tupla.id] = dict()
-            fasi_tmp[tupla.id]['info'] = tupla
+            fasi_tmp[tupla.id]['info'] = tupla.toDict()
             fasi_tmp[tupla.id]['children'] = list()
 
         top_level = list()

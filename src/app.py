@@ -146,8 +146,7 @@ def project():
         if (response['code'] == 200):
             response = getFasiProgetto(dbConn, projectId)
             if (response['code'] == 200):
-                print('JSON', response['fasi'])
-                return overview()
+                return render_template('project.html', fasi = response['fasi'])
         else:
             return overview()
     else:
