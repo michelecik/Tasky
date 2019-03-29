@@ -1,31 +1,98 @@
 {% extends 'base.html' %}
-
 {% block content %}
+<style type="text/css">
+	.container-fluid {
+		padding: 0 !important;
+	}
+</style>
 <div class="fasi">
 </div>
+<div class="form-group fase_modulo">
+	<div class="fase_field" data-id="nome">
+		<div class="fase_field_label">Nome:</div>
+		<div class="fase_field_input">
+			<input type="text" class="form-control" />
+		</div>
+	</div>
+	<div class="fase_field" data-id="descrizione">
+		<div class="fase_field_label">Descrizione:</div>
+		<div class="fase_field_input">
+			<textarea name="descrizione"></textarea>
+		</div>
+	</div>
+	<div class="fase_field" data-id="data_inizio">
+		<div class="fase_field_label">Data inizio:</div>
+		<div class="fase_field_input">
+			<input type="date" class="form-control"/>
+		</div>
+	</div>
+	<div class="fase_field" data-id="data_fine">
+		<div class="fase_field_label">Data fine:</div>
+		<div class="fase_field_input">
+			<input type="date" class="form-control"/>
+		</div>
+	</div>
+	
+	<button class="btn btn-dark">Reset</button>
+	<button class="btn btn-primary">Modifica</button>
+</div>
 
+<script src="https://cloud.tinymce.com/5/tinymce.min.js"></script>
 <script>
     var fasi = JSON.parse('{{ fasi | tojson | safe }}');
 	
-	function getFasiHTML(fasi) {
-		var html_code = '<div class="fase_box">';
+	var fasi_info = {};
+	function getFasiHTML(fasi, livello) {
+		var html_code = '';
+		var padding_left = livello * 20;
 		for (key in fasi) {
 			fase = fasi[key];
-			// Riga con info riguardanti la fase
-			html_code += '<div class="fase" data-id="' + fase.info.id + '">' + fase.info.nome + '</div>';
 			
+			fasi_info[key] = fase.info;
+			
+			html_code += '<div class="fase_box" data-id="' + fase.info.id + '"  data-open="0" style="padding-left: ' + padding_left + 'px"><div class="fase_label">' + fase.info.nome + '</div>';
 			//  Children box
+			html_code += '<div class="fase_children"><div class="fase_add">Aggiungi una fase</div>';
 			if (fase.children != null) {
-				html_code += '<div class="children">' + getFasiHTML(fase.children) + '</div>'; // Ricorsione
+				html_code += '<div class="children_items">' + getFasiHTML(fase.children, (livello + 1)) + '</div>'; // Ricorsione
 			}
+			html_code += '</div></div>';
 		}
-		html_code += '</div>';
 		
 		return html_code;
 	}
 	
+	function riempiModifica(fase) {
+		for (info in fase) {
+			if (info == 'descrizione') {
+				$(tinymce.get('descrizione').getBody()).html(fase[info]);
+			}
+			$('.fase_field[data-id="' + info + '"] .fase_field_input input').val(fase[info]);
+		}
+	}
+	
 	$().ready(function() {
-		$('.fasi').html(getFasiHTML(fasi));
+		$('.fasi').html(getFasiHTML(fasi, 0));
+		
+		tinymce.init({ 
+			selector: 'textarea',
+			height : '300px'
+		});
+	});
+	
+	$('body').on('click', '.fase_label', function() {
+		var idFase = $(this).closest('.fase_box').data('id');
+		var ev_prefix = '.fase_box[data-id="' + idFase + '"] ';
+		
+		if ($('.fase_box[data-id="' + idFase + '"]').attr('data-open') == '0') {
+			$(ev_prefix + '.fase_children:first').css({'display' : 'block'});
+			$('.fase_box[data-id="' + idFase + '"]').attr('data-open', '1');
+		} else {
+			$(ev_prefix + '.fase_children:first').css({'display' : ''});
+			$('.fase_box[data-id="' + idFase + '"]').attr('data-open', '0');
+		}
+		
+		riempiModifica(fasi_info[idFase]);
 	});
 </script>
 {% endblock %}

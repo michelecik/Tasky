@@ -93,6 +93,7 @@
 			});
 			
 			if (formValidate) {
+				parms['psw'] = getMD5(parms['psw']);
 				response = await controller('register', parms);
 				
 				if (response.code != 200) {

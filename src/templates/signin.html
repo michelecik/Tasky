@@ -43,7 +43,8 @@
 			var parms = {}
 			
 			parms['userid'] = $('.login_field[data-type="userid"] .login_input').val();
-			parms['psw'] = $('.login_field[data-type="psw"] .login_input').val();
+			parms['psw'] = getMD5($('.login_field[data-type="psw"] .login_input').val());
+			console.log(parms['psw']);
 			
 			
 			response = await controller('login', parms);
