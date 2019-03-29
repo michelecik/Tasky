@@ -29,7 +29,7 @@ class Commissioni(Base):
 
 class Fasi(Base):
     __tablename__ = 'fasi'
-    __public__ = ['id', 'nome', 'descrizione', 'data_inizio', 'data_fine', 'FK_stato']
+    __public__ = ['id', 'nome', 'descrizione', 'data_inizio', 'data_fine', 'FK_stato'] # Array delle colenne pubbliche
 
     id = Column(Integer, primary_key=True)
     nome = Column(String)

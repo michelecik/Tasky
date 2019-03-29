@@ -144,3 +144,68 @@ body {
 		.welcome_label {
 			color: black;
 		}
+/* PROGETTI --------------------------------------------------------------------------------------------------- */
+.fasi {
+	display: inline-block;
+	width: calc(40% - 2.5px);
+	height: calc(100vh - 63px);
+	padding: 20px;
+	vertical-align: top;
+	overflow-y: auto;
+}
+	.fase_box {
+		width: 100%;
+	}
+	.fase_label {
+		width: calc(100% - 25px);
+		padding: 5px;
+		padding-left: 20px;
+		background-image: url(../img/expand.png); /* https://www.flaticon.com/free-icon/add-square-button_25300#term=plus&page=1&position=36 */
+		background-size: auto 30%;
+		background-position: left;
+		background-repeat: no-repeat;
+		cursor: pointer;
+	}
+	.fase_label:hover {
+		text-decoration: underline;
+	}
+	.fase_children {
+		display: none;
+		border-left: 1px solid black;
+		margin-left: 4.5px;
+	}
+	.fase_box[data-open='1'] > .fase_label:first-child {
+		font-weight: bold;
+		background-image: url(../img/collapse.png);
+	}
+	.fase_add {
+		display: inline-block;
+		margin-left: 20px;
+		font-size: 12px;
+		color: blue;
+		cursor: pointer
+	}
+	.fase_add:hover {
+		background-color: blue;
+		color: white;
+	}
+.fase_modulo {
+	display: inline-block;
+	width: calc(60% - 2.5px);
+	height: calc(100vh - 63px);
+	padding: 20px 50px;
+	overflow-y: auto;
+	margin-bottom: 0 !important;
+	background-color: #f8f9fa;
+}
+.fase_field {
+	width: 100%;
+	margin-bottom: 30px;
+}
+.fase_field_label {
+	font-weight: bold;
+	margin-bottom: 5px;
+}
+.fase_field_input {
+	width: 100%;
+}
