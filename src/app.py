@@ -148,7 +148,9 @@ def project():
         if (response['code'] == 200):
             response = getFasiProgetto(dbConn, projectId)
             if (response['code'] == 200):
-                return render_template('project.html', fasi = response['fasi'])
+                stati = getStatiProgetti(dbConn)
+                print('------------------------------------------------------ STATI: ', stati)
+                return render_template('project.html', fasi = json.dumps(response['fasi']), stati = json.dumps(stati['stati']))
         else:
             return overview()
     else:
@@ -156,6 +158,63 @@ def project():
 
     return render_template('overview.html', progetti = getAllProgetti(dbConn, session) )
 
+
+@app.route('/editFase', methods=['POST'])
+def editFase():
+    print('-------------------------------- editFase ----------------------------------------')
+    response = getUsrId(dbConn, session.get('userid'), session.get('psw'))
+    if (response['code'] == 200):
+        if request.method == 'POST':
+            print(request.form)
+            if request.form['id']:
+                fase = getFaseById(dbConn, request.form['id'])
+                fase.nome = request.form['nome'].strip()
+                fase.descrizione = request.form['descrizione'].strip()
+                fase.data_inizio = request.form['data_inizio'].strip()
+                fase.data_fine = request.form['data_fine'].strip()
+                fase.parent = request.form['parent'].strip()
+                if len(request.form['parent'].strip()) <= 0:
+                    fase.parent = None
+                else:
+                    fase.parent = request.form['parent'].strip()
+                fase.FK_progetto = request.form['FK_progetto'].strip()
+                fase.FK_stato = request.form['FK_stato'].strip()
+
+                try:
+                    dbConn.s.commit()
+                except Exception as e:
+                    response = {
+                        'code': 500,
+                        'content': 'Errore anomalo'
+                    }
+
+                return redirect('/project?id=' + request.form['FK_progetto'])
+            else:
+                faseData = dict()
+                faseData['nome'] = request.form['nome']
+                faseData['descrizione'] = request.form['descrizione']
+                faseData['FK_stato'] = request.form['FK_stato']
+                faseData['data_inizio'] = request.form['data_inizio']
+                faseData['data_fine'] = request.form['data_fine']
+                faseData['FK_progetto'] = request.form['FK_progetto']
+                faseData['parent'] = request.form['parent']
+                try:
+                    fase = Fasi(faseData['nome'], faseData['descrizione'], faseData['data_inizio'], faseData['data_fine'], faseData['parent'], 0, faseData['FK_progetto'], faseData['FK_stato'])
+
+                    dbConn.s.add(fase)
+                    dbConn.s.commit()
+
+                    return redirect('/project?id=' + request.form['FK_progetto'])
+                except Exception as e:
+                    response = {
+                        'code': 500,
+                        'content': 'Errore anomalo'
+                    }
+            return redirect('overview')
+
+        return redirect('overview')
+    else:
+        return redirect('login')
 
 # ---- MAIN ---- #
 if __name__ == "__main__":

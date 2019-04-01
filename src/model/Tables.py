@@ -29,7 +29,7 @@ class Commissioni(Base):
 
 class Fasi(Base):
     __tablename__ = 'fasi'
-    __public__ = ['id', 'nome', 'descrizione', 'data_inizio', 'data_fine', 'FK_stato'] # Array delle colenne pubbliche
+    __public__ = ['id', 'nome', 'descrizione', 'data_inizio', 'data_fine', 'parent', 'FK_progetto', 'FK_stato'] # Array delle colenne pubbliche
 
     id = Column(Integer, primary_key=True)
     nome = Column(String)
@@ -50,13 +50,37 @@ class Fasi(Base):
         self.isMain = isMain
         self.FK_progetto = FK_progetto
         self.FK_stato = FK_stato
+    """
+    def __init__(self, faseData):
+        if faseData['id']:
+            self.id = faseData['id']
+        self.nome = faseData['nome'].strip()
+        self.descrizione = faseData['descrizione'].strip()
+        self.data_inizio = faseData['data_inizio'].strip()
+        self.data_fine = faseData['data_fine'].strip()
+        self.parent = faseData['parent'].strip()
+        if faseData['isMain']:
+            self.isMain = faseData['isMain']
+        else:
+            self.isMain = 0
+        self.FK_progetto = faseData['FK_progetto'].strip()
+        self.FK_stato = faseData['FK_stato'].strip()
+    """
+    def validate(self):
+        errors = dict()
+
+        # validate nome
+        if (len(self.nome) < 3) or not(rematch('^[a-zA-Z_]*$', self.nome)):
+            errors['nome'] = 'Il nome deve essere lungo almeno 3 caretteri e non deve contenere nè caretteri speciali nè numeri'
+
+        return errors
 
     def toDict(self):
         dict = {}
         for public_key in self.__public__:
             value = getattr(self, public_key)
             if value:
-                dict[public_key] = value
+                dict[public_key] = str(value)
         return dict
 
 
@@ -99,11 +123,20 @@ class Ruoli(Base):
 
 class Stati(Base):
     __tablename__ = 'stati'
+    __public__ = ['id', 'nome', 'descrizione', 'colore']
 
     id = Column(Integer, primary_key=True)
     nome = Column(String)
     descrizione = Column(String)
     colore = Column(String)
+
+    def toDict(self):
+        dict = {}
+        for public_key in self.__public__:
+            value = getattr(self, public_key)
+            if value:
+                dict[public_key] = value
+        return dict
 
 
 class Utenti(Base):

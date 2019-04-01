@@ -83,9 +83,6 @@ def getFasiProgetto(dbConn, projectId):
             fasi[i]['info'] = fase['info']
             fasi[i]['children'] = getChildren(fasi_tmp, fase['children'])
     except Exception as e:
-        print('-------------------- ERRORE --------------------------------')
-        #print('ERRORE', e)
-        print(traceback.print_exc())
         response = {
             'code': 500,
             'content': 'Errore anomalo'
@@ -111,3 +108,33 @@ def getProgettoById(dbConn, session, project_id):
 def getProgettoById(dbConn, session, project_id):
     res = dbConn.s.query(Progetti).filter(Progetti.id == project_id).first()
     return res
+
+def getFaseById(dbConn, fase_id):
+    res = dbConn.s.query(Fasi).filter(Fasi.id == fase_id).first()
+    return res
+
+def getStatiProgetti(dbConn):
+    try:
+        result = dbConn.s.query(Stati).all()
+
+        stati = dict()
+        for tupla in result:
+            stati[tupla.id] = dict()
+            stati[tupla.id]['info'] = tupla.toDict()
+    except Exception as e:
+        print('-------------------- ERRORE --------------------------------')
+        # print('ERRORE', e)
+        print(traceback.print_exc())
+        response = {
+            'code': 500,
+            'content': 'Errore anomalo'
+        }
+        return response
+
+    response = {
+        'code': 200,
+        'content': '',
+        'stati': stati
+    }
+    return response
+
