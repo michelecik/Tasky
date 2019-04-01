@@ -8,38 +8,73 @@
 <div class="fasi">
 </div>
 <div class="form-group fase_modulo">
-	<div class="fase_field" data-id="nome">
-		<div class="fase_field_label">Nome:</div>
-		<div class="fase_field_input">
-			<input type="text" class="form-control" />
+	<form method="post" action="editFase" name="editFase">
+		<div class="fase_field" data-id="id">
+			<div class="fase_field_label">ID:</div>
+			<div class="fase_field_input">
+				<input name="id" type="text" class="form-control" readonly/>
+			</div>
+			<div class="fase_field_err"></div>
 		</div>
-	</div>
-	<div class="fase_field" data-id="descrizione">
-		<div class="fase_field_label">Descrizione:</div>
-		<div class="fase_field_input">
-			<textarea name="descrizione"></textarea>
+		<div class="fase_field" data-id="nome" data-required="1">
+			<div class="fase_field_label">Nome:</div>
+			<div class="fase_field_input">
+				<input name="nome" type="text" class="form-control" />
+			</div>
+			<div class="fase_field_err"></div>
 		</div>
-	</div>
-	<div class="fase_field" data-id="data_inizio">
-		<div class="fase_field_label">Data inizio:</div>
-		<div class="fase_field_input">
-			<input type="date" class="form-control"/>
+		<div class="fase_field" data-id="descrizione">
+			<div class="fase_field_label">Descrizione:</div>
+			<div class="fase_field_input">
+				<textarea name="descrizione"></textarea>
+			</div>
+			<div class="fase_field_err"></div>
 		</div>
-	</div>
-	<div class="fase_field" data-id="data_fine">
-		<div class="fase_field_label">Data fine:</div>
-		<div class="fase_field_input">
-			<input type="date" class="form-control"/>
+		<div class="fase_field" data-id="FK_stato" data-required="1">
+			<div class="fase_field_label">Stato:</div>
+			<div class="fase_field_input">
+				<select  name="FK_stato" class="form-control">
+				</select>
+			</div>
+			<div class="fase_field_err"></div>
 		</div>
-	</div>
-	
-	<button class="btn btn-dark">Reset</button>
-	<button class="btn btn-primary">Modifica</button>
+		<div class="fase_field" data-id="data_inizio">
+			<div class="fase_field_label">Data inizio:</div>
+			<div class="fase_field_input">
+				<input name="data_inizio" type="date" class="form-control"/>
+			</div>
+			<div class="fase_field_err"></div>
+		</div>
+		<div class="fase_field" data-id="data_fine">
+			<div class="fase_field_label">Data fine:</div>
+			<div class="fase_field_input">
+				<input  name="data_fine" type="date" class="form-control"/>
+			</div>
+			<div class="fase_field_err"></div>
+		</div>
+		<div class="fase_field" data-id="FK_progetto">
+			<div class="fase_field_label">Progetto:</div>
+			<div class="fase_field_input">
+				<input  name="FK_progetto" type="text" class="form-control" readonly/>
+			</div>
+			<div class="fase_field_err"></div>
+		</div>
+		<div class="fase_field" data-id="parent">
+			<div class="fase_field_label">Padre:</div>
+			<div class="fase_field_input">
+				<input name="parent" type="text" class="form-control" readonly/>
+			</div>
+			<div class="fase_field_err"></div>
+		</div>
+		<button class="btn btn-dark">Reset</button>
+		<button class="btn btn-primary"></button>
+	</form>
 </div>
 
-<script src="https://cloud.tinymce.com/5/tinymce.min.js"></script>
+<script src="https://cloud.tinymce.com/5/tinymce.min.js?apiKey=54stjutd616k6d3pd9c8p4dzz117l9641cfbwg2u854oksio"></script>
 <script>
-    var fasi = JSON.parse('{{ fasi | tojson | safe }}');
+    var fasi = JSON.parse({{ fasi | tojson }});
+    var stati = JSON.parse({{ stati | tojson }});
 	
 	var fasi_info = {};
 	function getFasiHTML(fasi, livello) {
@@ -50,7 +85,7 @@
 			
 			fasi_info[key] = fase.info;
 			
-			html_code += '<div class="fase_box" data-id="' + fase.info.id + '"  data-open="0" style="padding-left: ' + padding_left + 'px"><div class="fase_label">' + fase.info.nome + '</div>';
+			html_code += '<div class="fase_box" data-id="' + fase.info.id + '"  data-open="0" style="padding-left: ' + padding_left + 'px"><div class="fase_label">' + fase.info.nome + '<div class="fase_stato" style="background-color: #' + stati[fase.info.FK_stato].info.colore + '"></div></div>';
 			//  Children box
 			html_code += '<div class="fase_children"><div class="fase_add">Aggiungi una fase</div>';
 			if (fase.children != null) {
@@ -62,23 +97,63 @@
 		return html_code;
 	}
 	
-	function riempiModifica(fase) {
-		for (info in fase) {
-			if (info == 'descrizione') {
-				$(tinymce.get('descrizione').getBody()).html(fase[info]);
-			}
-			$('.fase_field[data-id="' + info + '"] .fase_field_input input').val(fase[info]);
-		}
+	function hexToRgb(hex) {
+		var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+		return result ? {
+			r: parseInt(result[1], 16),
+			g: parseInt(result[2], 16),
+			b: parseInt(result[3], 16)
+		} : null;
 	}
 	
-	$().ready(function() {
-		$('.fasi').html(getFasiHTML(fasi, 0));
-		
-		tinymce.init({ 
-			selector: 'textarea',
-			height : '300px'
+	function riempiModifica(fase) {
+		// Pulisco i campi di input
+		$('.fase_modulo input').each(function() {
+			$(this).val('');
 		});
-	});
+		$(tinymce.get('descrizione').getBody()).html('');
+		
+		for (info in fase) {
+			switch (info) {
+				case 'descrizione':
+					$(tinymce.get('descrizione').getBody()).html(fase[info]);
+					break;
+				case 'FK_stato':
+					$('.fase_field[data-id="FK_stato"] select').val(fase[info])
+				default:
+					$('.fase_field[data-id="' + info + '"] .fase_field_input input').val(fase[info]);
+			}
+		}
+		
+		$('.btn-primary').html('Modifica');
+	}
+	
+	function riempiCreate(padre) {
+		// Pulisco i campi di input
+		$('.fase_modulo input').each(function() {
+			$(this).val('');
+		});
+		$(tinymce.get('descrizione').getBody()).html('');
+		
+		$('.fase_field[data-id="parent"] .fase_field_input input').val(padre);
+		$('.fase_field[data-id="FK_stato"] select').val(1);
+		$('.fase_field[data-id="FK_progetto"] .fase_field_input input').val(idProgetto);
+		
+		$('.btn-primary').html('Aggiungi');
+	}
+	
+	function riempiStati(stati) {
+		$('.fase_field[data-id="FK_stato"] select').html('');
+		for (key in stati) {
+			stato = stati[key].info;
+			
+			colore = hexToRgb('#' + stato.colore);
+			
+			html_code = '<option value="' + stato.id + '" style="background-color: rgba(' + colore.r + ', ' + colore.g + ', ' + colore.b + ', 0.1)">' + stato.nome + '</option>';
+			
+			$('.fase_field[data-id="FK_stato"] select').append(html_code);
+		}
+	}
 	
 	$('body').on('click', '.fase_label', function() {
 		var idFase = $(this).closest('.fase_box').data('id');
@@ -93,6 +168,75 @@
 		}
 		
 		riempiModifica(fasi_info[idFase]);
+	});
+	
+	$('body').on('click', '.fase_add', function() {
+		var idParent = $(this).closest('.fase_box').data('id');
+		console.log('ID PADRE', idParent);	
+		riempiCreate(idParent);
+	});
+	
+	$('body').on('click', '.btn-primary', function() {
+		/*
+		var idFase = $(this).closest('.fase_modulo').attr('data-id');
+		
+		if (idFase.length < 0) {
+			return null;
+		}
+		*/
+		var parms = {}
+			
+		var formValidate = true;
+		$('.fase_field').each(function() {
+			var key = $(this).data('id');
+			
+			var value = null;
+			switch (key) {
+				case 'descrizione':
+					value = $(tinymce.get('descrizione').getBody()).html();
+					break;
+				case 'FK_stato':
+					value = $('.fase_field[data-id="FK_stato"] select').val();
+					break;
+				default:
+					value = $(this).find('.fase_field_input input').val();
+			}
+
+			var isRequire = ($(this).data('required') == '1')
+
+			if (isRequire) {
+				if ((value === undefined) || (value == null) || (value == '')) {
+					formValidate = false;
+					$(this).find('.fase_field_err').html('Questo campo non può essere vuoto');
+				} else {
+					$(this).find('.fase_field_err').html('');
+				}
+			}
+
+			parms[key] = value;
+		});
+		
+		if (formValidate) {
+			$('editFase').submit();
+		}
+	});
+	
+	function onInitTiny(inst) {
+		riempiModifica(fasi_info[Object.keys(fasi_info)[0]]);
+	}
+	
+	var idProgetto = null;
+	$().ready(function() {
+		$('.fasi').html(getFasiHTML(fasi, 0));
+		
+		tinymce.init({ 
+			selector: 'textarea',
+			height : '300px',
+			init_instance_callback : 'onInitTiny'
+		});
+		
+		riempiStati(stati);
+		idProgetto = fasi_info[Object.keys(fasi_info)[0]].id;
 	});
 </script>
 {% endblock %}
