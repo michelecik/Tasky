@@ -114,7 +114,7 @@ def edit(project_id):
 def delete():
     clicked = None
     if request.method == 'POST':
-        print('GOT POST REQUESTTTTTTTTTTT')
+        
         clicked = json.loads(request.get_data())
         print(clicked['id'], clicked['titolo'])
         progetto = getProgettoById(dbConn, session, clicked['id'])
